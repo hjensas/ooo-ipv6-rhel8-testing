@@ -51,8 +51,6 @@
         - tmux
         - vim-enhanced
         - tcpdump
-        - python-setuptools
-        - python-requests
         - libguestfs-tools
         - patch
         - patchutils
@@ -68,7 +66,7 @@
       name: "{{ packages }}"
     vars:
       packages:
-        - python-tripleoclient
+        - python3-tripleoclient
   - name: Git checkout ooo-bp-tripleo-routed-networks-templates-testing
     git:
       repo: https://github.com/hjensas/ooo-ipv6-testing.git
