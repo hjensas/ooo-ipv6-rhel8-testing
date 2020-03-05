@@ -16,6 +16,8 @@ OVB_UNDERCLOUD_PUBLIC=$(openstack server show undercloud -f json -c addresses | 
 cat << EOF > inventory.ini
 [undercloud]
 $OVB_UNDERCLOUD ansible_user=cloud-user ansible_ssh_extra_args='-o StrictHostKeyChecking=no' undercloud_public_ip=$OVB_UNDERCLOUD_PUBLIC
+[undercloud:vars]
+pool_id=8a85f98c60c2c2b40160c324e5d21d70
 EOF
 
 ansible-playbook -i inventory.ini ../ooo-ipv6-rhel8-testing/playbooks/ssh_hardening.yaml
