@@ -18,11 +18,11 @@ cat << EOF > inventory.ini
 $OVB_UNDERCLOUD ansible_user=cloud-user ansible_ssh_extra_args='-o StrictHostKeyChecking=no' undercloud_public_ip=$OVB_UNDERCLOUD_PUBLIC
 EOF
 
-ansible-playbook -i inventory.ini ../ooo-ipv6-testing/playbooks/ssh_hardening.yaml
+ansible-playbook -i inventory.ini ../ooo-ipv6-rhel8-testing/playbooks/ssh_hardening.yaml
 
 scp -o StrictHostKeyChecking=no nodes.json cloud-user@$OVB_UNDERCLOUD:~/instackenv.json
 
-DEPLOY_UNDERCLOUD="ansible-playbook -i inventory.ini ../ooo-ipv6-testing/playbooks/deploy_undercloud.yaml"
+DEPLOY_UNDERCLOUD="ansible-playbook -i inventory.ini ../ooo-ipv6-rhel8-testing/playbooks/deploy_undercloud.yaml"
 DEPLOY_OVERCLOUD="Log into undercloud ($OVB_UNDERCLOUD) and run command: bash ~/overcloud/deploy_overcloud.sh"
 echo "###############################################"
 echo -e "Undercloud floating IP:\n\t$OVB_UNDERCLOUD"

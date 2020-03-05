@@ -29,7 +29,7 @@ parameter_defaults:
   role: ''
 
   undercloud_flavor: m1.large2
-  undercloud_image: CentOS-7-x86_64-GenericCloud-1804_02
+  undercloud_image: hjensas-rhel8
   undercloud_name: undercloud
 
   radvd_image: CentOS-7-x86_64-GenericCloud-1804_02
