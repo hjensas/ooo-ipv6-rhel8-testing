@@ -22,6 +22,19 @@
   - name: Bring up public interface
     become: yes
     command: ifup eth2
+  - name: Register node
+    become: yes
+    shell: |
+      subscription-manager register --username {{ rhn_username }} --password {{ rhn_password }}
+      subscription-manager role --set="Red Hat Enterprise Linux Server"
+      subscription-manager service-level --set="Self-Support"
+      subscription-manager usage --set="Development/Test"
+      subscription-manager attach --pool={{ pool_id }}
+  - name: Set up repos
+    become: yes
+    shell: |
+      subscription-manager repos --disable=*
+      subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms --enable=rhel-8-for-x86_64-appstream-rpms --enable=rhel-8-for-x86_64-highavailability-rpms --enable=ansible-2.8-for-rhel-8-x86_64-rpms --enable=openstack-16-for-rhel-8-x86_64-rpms --enable=fast-datapath-for-rhel-8-x86_64-rpms
   - name: Install packages
     become: yes
     yum:
@@ -38,19 +51,6 @@
         - patch
         - patchutils
         - createrepo_c
-  - name: Register node
-    become: yes
-    shell: |
-      subscription-manager register --username {{ rhn_username }} --password {{ rhn_password }}
-      subscription-manager role --set="Red Hat Enterprise Linux Server"
-      subscription-manager service-level --set="Self-Support"
-      subscription-manager usage --set="Development/Test"
-      subscription-manager attach --pool={{ pool_id }}
-  - name: Set up repos
-    become: yes
-    shell: |
-      subscription-manager repos --disable=*
-      subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms --enable=rhel-8-for-x86_64-appstream-rpms --enable=rhel-8-for-x86_64-highavailability-rpms --enable=ansible-2.8-for-rhel-8-x86_64-rpms --enable=openstack-16-for-rhel-8-x86_64-rpms --enable=fast-datapath-for-rhel-8-x86_64-rpms
   - name: upgrade all packages
     become: yes
     yum:
