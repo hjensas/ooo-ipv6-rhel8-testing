@@ -1,0 +1,127 @@
+- hosts: undercloud
+  tasks:
+  - name: Set up some swap space
+    become: yes
+    shell: |
+      dd if=/dev/zero of=/opt/8GB.swap bs=8192 count=1048576
+      mkswap /opt/8GB.swap
+      swapon /opt/8GB.swap
+      echo "/opt/8GB.swap swap                                    swap    defaults 0 0" >> /etc/fstab
+  - name: Set up public interface
+    become: yes
+    copy:
+      content: | 
+        NAME=eth2
+        DEVICE=eth2
+        ONBOOT=yes
+        BOOTPROTO=static
+        IPV6INIT=yes
+        IPV6ADDR={{ undercloud_public_ip }}
+        MTU=1450
+      dest: /etc/sysconfig/network-scripts/ifcfg-eth2
+  - name: Bring up public interface
+    become: yes
+    command: ifup eth2
+  - name: Install packages
+    become: yes
+    yum:
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - git
+        - tmux
+        - vim-enhanced
+        - tcpdump
+        - python-setuptools
+        - python-requests
+        - libguestfs-tools
+        - patch
+        - patchutils
+        - createrepo_c
+  - name: Register node
+    become: yes
+    shell: |
+      subscription-manager register --username {{ rhn_username }} --password {{ rhn_password }}
+      subscription-manager role --set="Red Hat Enterprise Linux Server"
+      subscription-manager service-level --set="Self-Support"
+      subscription-manager usage --set="Development/Test"
+      subscription-manager attach --pool={{ pool_id }}
+  - name: upgrade all packages
+    become: yes
+    yum:
+      name: '*'
+      state: latest
+  - name: Install tripleo client
+    become: yes
+    yum:
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - python-tripleoclient
+  - name: Git checkout ooo-bp-tripleo-routed-networks-templates-testing
+    git:
+      repo: https://github.com/hjensas/ooo-ipv6-testing.git
+      dest: "{{ ansible_env.HOME }}/ooo-ipv6-testing"
+  - name: Create symlinks
+    file:
+      src: "{{ ansible_env.HOME }}/ooo-ipv6-testing/{{ item }}"
+      dest: "{{ ansible_env.HOME }}/{{ item }}"
+      state: link
+    with_items:
+      - overcloud
+      - undercloud.conf
+      - set_capabilities.sh
+      - ipv6-patches.sh
+      - ipv6-image-patches.sh
+  - name: Create images directory
+    file:
+      dest: "{{ ansible_env.HOME }}/images"
+      state: directory
+  - name: Build Images - async task
+    shell: |
+      cd {{ ansible_env.HOME }}/images
+      export DIB_YUM_REPO_CONF="/etc/yum.repos.d/delorean*"
+      openstack overcloud image build
+  - name: Run script to patch stuff
+    become: yes
+    shell: |
+      bash {{ ansible_env.HOME }}/ipv6-patches.sh
+  - name: Create local repo directory
+    become: yes
+    file:
+      dest: /opt/local_repo
+      state: directory
+  - name: Install Undercloud
+    shell: |
+      openstack tripleo container image prepare default --local-push-destination --output-env-file {{ ansible_env.HOME }}/containers-prepare-parameter.yaml
+      cat << EOF >> {{ ansible_env.HOME }}/containers-prepare-parameter.yaml
+          modify_role: tripleo-modify-image
+          modify_append_tag: "-updated"
+          modify_vars:
+            tasks_from: yum_update.yml
+            compare_host_packages: true
+            yum_repos_dir_path: /etc/yum.repos.d
+      EOF
+      openstack undercloud install
+  - name: Run script to patch image
+    become: yes
+    shell: |
+      bash {{ ansible_env.HOME }}/ipv6-image-patches.sh
+  - name: Upload overcloud images
+    shell: |
+      source {{ ansible_env.HOME }}/stackrc
+      cd {{ ansible_env.HOME }}/images
+      openstack overcloud image upload
+  - name: Import nodes
+    shell: |
+      source {{ ansible_env.HOME }}/stackrc
+      openstack overcloud node import instackenv.json
+  - name: Introspect and provide nodes
+    shell: |
+      source {{ ansible_env.HOME }}/stackrc
+      openstack overcloud node introspect --all-manageable --provide
+  - name: Create flavors and set node capabilities
+    shell: |
+      source {{ ansible_env.HOME }}/stackrc
+      bash {{ ansible_env.HOME }}/set_capabilities.sh
+

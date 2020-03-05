@@ -1,0 +1,37 @@
+- name: Storage
+  vip: true
+  vlan: 30
+  name_lower: storage
+  ip_subnet: 'fd12:3456:789a:31::/64'
+  allocation_pools: [{'start': 'fd12:3456:789a:31::500', 'end': 'fd12:3456:789a:31::999'}]
+  mtu: 1450
+- name: StorageMgmt
+  name_lower: storage_mgmt
+  vip: true
+  vlan: 40
+  ip_subnet: 'fd12:3456:789a:41::/64'
+  allocation_pools: [{'start': 'fd12:3456:789a:41::500', 'end': 'fd12:3456:789a:41::999'}]
+  mtu: 1450
+- name: InternalApi
+  name_lower: internal_api
+  vip: true
+  vlan: 20
+  ip_subnet: 'fd12:3456:789a:21::/64'
+  allocation_pools: [{'start': 'fd12:3456:789a:21::500', 'end': 'fd12:3456:789a:21::999'}]
+  mtu: 1450
+- name: Tenant
+  vip: false  # Tenant network does not use VIPs
+  name_lower: tenant
+  vlan: 50
+  ip_subnet: 'fd12:3456:789a:51::/64'
+  allocation_pools: [{'start': 'fd12:3456:789a:51::500', 'end': 'fd12:3456:789a:51::999'}]
+  mtu: 1450
+- name: External
+  vip: true
+  name_lower: external
+  vlan: 10
+  ip_subnet: 'fd12:3456:789a:ffff::/64'
+  allocation_pools: [{'start': 'fd12:3456:789a:ffff::500', 'end': 'fd12:3456:789a:ffff::999'}]
+  gateway_ip: 'fd12:3456:789a:ffff::1'
+  mtu: 1450
+

@@ -1,0 +1,31 @@
+parameter_defaults:
+  #
+  # IPv6 params for all networks
+  # 
+
+  provision_net_ip_version: 6
+  provision_net_cidr: fd12:3456:789a:1::/64
+  radvd_provision_address: fd12:3456:789a:1::fffe
+
+  public_net_ip_version: 6
+  public_net_cidr: fd12:3456:789a:ffff::/64
+
+  overcloud_internal_net_ip_version: 6
+  overcloud_internal_net_cidr: fd12:3456:789a:21::/64
+
+  overcloud_storage_net_ip_version: 6
+  overcloud_storage_net_cidr: fd12:3456:789a:31::/64
+ 
+  overcloud_storage_mgmt_net_ip_version: 6
+  overcloud_storage_mgmt_net_cidr: fd12:3456:789a:41::/64
+ 
+  overcloud_tenant_net_ip_version: 6
+  overcloud_tenant_net_cidr: fd12:3456:789a:51::/64
+
+  IPv6_dhcpv6-statefull: true
+ 
+resource_registry:
+  OS::OVB::UndercloudNetworks: templates/undercloud-networks.yaml
+  OS::OVB::BaremetalNetworks: templates/baremetal-networks-all.yaml
+  OS::OVB::RoouterAdvertisementDaemon: templates/ipv6-radvd.yaml
+
