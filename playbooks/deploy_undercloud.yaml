@@ -1,4 +1,10 @@
 - hosts: undercloud
+  vars_prompt:
+    - name: rhn_username
+      prompt: "RHN Username?"
+      private: no
+    - name: rhn_password
+      prompt: "RHN password?"
   tasks:
   - name: Set up some swap space
     become: yes
