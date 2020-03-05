@@ -12,6 +12,11 @@ Set up OVB environment
   git clone https://opendev.org/openstack/openstack-virtual-baremetal.git ~/ovb-ipv6-rhel8/openstack-virtual-baremetal
   cd ~/ovb-ipv6-rhel8/openstack-virtual-baremetal
   git fetch https://review.opendev.org/openstack/openstack-virtual-baremetal refs/changes/49/686549/3 && git checkout FETCH_HEAD
+  git switch -c fix-openstacsdk-4.0.0-format-issue
+  git fetch https://review.opendev.org/openstack/openstack-virtual-baremetal refs/changes/60/685460/5 && git checkout FETCH_HEAD
+  git switch -c ipv6-support
+  git rebase fix-openstacsdk-4.0.0-format-issue
+  cd ~
   pip install ~/ovb-ipv6-rhel8/openstack-virtual-baremetal
   pip install python-openstackclient
   pip install ansible
