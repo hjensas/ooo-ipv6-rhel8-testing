@@ -67,10 +67,10 @@
     vars:
       packages:
         - python3-tripleoclient
-  - name: Git checkout ooo-bp-tripleo-routed-networks-templates-testing
+  - name: Git checkout testing repo
     git:
       repo: https://github.com/hjensas/ooo-ipv6-rhel8-testing.git
-      dest: "{{ ansible_env.HOME }}/ooo-ipv6-testing"
+      dest: "{{ ansible_env.HOME }}/ooo-ipv6-rhel8-testing"
   - name: Create symlinks
     file:
       src: "{{ ansible_env.HOME }}/ooo-ipv6-testing/{{ item }}"
