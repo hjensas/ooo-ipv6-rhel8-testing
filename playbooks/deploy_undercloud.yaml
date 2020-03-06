@@ -188,10 +188,9 @@
             compare_host_packages: true
             yum_repos_dir_path: /etc/yum.repos.d
             update_repo: local-repo
-      ContainerImageRegistryCredentials:
-        registry.redhat.io:
-          {{ rhn_username }}: {{ rhn_password }}
-      ContainerImageRegistryLogin: true
+        ContainerImageRegistryCredentials:
+          registry.redhat.io:
+            {{ rhn_username }}: '{{ rhn_password }}'
       EOF
       openstack undercloud install
   - name: Run script to patch image
