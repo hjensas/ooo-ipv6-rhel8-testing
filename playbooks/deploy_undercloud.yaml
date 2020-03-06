@@ -106,8 +106,8 @@
   - name: Copy rpms to local_repo
     become: yes
     file:
-      dest: "/opt/local_repo/{{ items }}"
-      src: "/home/hjensas/local_repo/{{ items }}"
+      dest: "/opt/local_repo/{{ item }}"
+      src: "/home/hjensas/local_repo/{{ item }}"
     with_items:
       - dnsmasq-2.79-11.el8.x86_64.rpm
       - dnsmasq-utils-2.79-11.el8.x86_64.rpm
