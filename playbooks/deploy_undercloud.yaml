@@ -73,7 +73,7 @@
       dest: "{{ ansible_env.HOME }}/ooo-ipv6-rhel8-testing"
   - name: Create symlinks
     file:
-      src: "{{ ansible_env.HOME }}/ooo-ipv6-testing/{{ item }}"
+      src: "{{ ansible_env.HOME }}/ooo-ipv6-rhel8-testing/{{ item }}"
       dest: "{{ ansible_env.HOME }}/{{ item }}"
       state: link
     with_items:
