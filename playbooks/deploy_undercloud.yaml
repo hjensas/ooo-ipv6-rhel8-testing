@@ -105,13 +105,15 @@
       state: directory
   - name: Copy rpms to local_repo
     become: yes
-    file:
+    copy:
       dest: "/opt/local_repo/"
-      src: "/home/hjensas/local_repo/{{ item }}"
-    with_items:
-      - dnsmasq-2.79-11.el8.x86_64.rpm
-      - dnsmasq-utils-2.79-11.el8.x86_64.rpm
-      - cloud-init-18.5-5.el8_1.eterrell202003061044.noarch.rpm
+      src: "{{ item }}"
+      owner: root
+      mode: 666
+    with_fileglob:
+      - /home/hjensas/local_repo/dnsmasq-2.79-11.el8.x86_64.rpm
+      - /home/hjensas/local_repo/dnsmasq-utils-2.79-11.el8.x86_64.rpm
+      - /home/hjensas/local_repo/cloud-init-18.5-5.el8_1.eterrell202003061044.noarch.rpm
   - name: Create Repo
     become: yes
     shell: |
