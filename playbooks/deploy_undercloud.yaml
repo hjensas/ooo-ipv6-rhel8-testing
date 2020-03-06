@@ -123,6 +123,8 @@
     become: yes
     copy:
       content: |
+        #!/usr/bin/python3
+
         import socket
         import http.server
 
@@ -138,6 +140,8 @@
         if __name__ == '__main__':
             main()
       dest: /usr/local/bin/simplehttpserver.py
+      owner: root
+      mode: 755
   - name: Create systemd unit for simplehttpserver
     become: yes
     copy:
