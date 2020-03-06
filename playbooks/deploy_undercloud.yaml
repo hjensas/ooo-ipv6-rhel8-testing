@@ -198,7 +198,6 @@
       EOF
       openstack undercloud install
   - name: Run script to patch image
-    become: yes
     shell: |
       bash {{ ansible_env.HOME }}/ipv6-image-patches.sh
   - name: Upload overcloud images

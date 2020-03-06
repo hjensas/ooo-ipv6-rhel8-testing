@@ -7,17 +7,13 @@ set -e
 #
 cd ~
 
-git clone -b bug/1806014 https://github.com/hjensas/cloud-init.git
 
 LIBGUESTFS_BACKEND=direct virt-customize --add ~/images/overcloud-full.qcow2 \
-  --delete /usr/lib/python2.7/site-packages/cloudinit \
+  --upload /opt/local_repo/cloud-init-18.5-5.el8_1.eterrell202003061044.noarch.rpm:/root \
   --selinux-relabel
-LIBGUESTFS_BACKEND=direct virt-customize --add ~/images/overcloud-full.qcow2 \
-  --copy-in /home/centos/cloud-init/cloudinit:/usr/lib/python2.7/site-packages/ \
-  --selinux-relabel
-LIBGUESTFS_BACKEND=direct virt-customize --add ~/images/overcloud-full.qcow2 \
-  --delete /usr/lib/python2.7/site-packages/cloudinit/tests \
-  --selinux-relabel
+# LIBGUESTFS_BACKEND=direct virt-customize --add ~/images/overcloud-full.qcow2 \
+#   ----run-command "dnf update /root/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm" \
+#   --selinux-relabel
 
 echo "DONE patching image"
 
