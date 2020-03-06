@@ -139,6 +139,7 @@
             main()
       dest: /usr/local/bin/simplehttpserver.py
   - name: Create systemd unit for simplehttpserver
+    become: yes
     copy:
       content: |
         [Unit]
