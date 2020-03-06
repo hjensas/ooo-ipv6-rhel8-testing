@@ -103,6 +103,65 @@
     file:
       dest: /opt/local_repo
       state: directory
+  - name: Copy rpms to local_repo
+    become: yes
+    file:
+      dest: "/opt/local_repo/{{ items }}"
+      src: "/home/hjensas/local_repo/{{ items }}"
+    with_items:
+      - dnsmasq-2.79-11.el8.x86_64.rpm
+      - dnsmasq-utils-2.79-11.el8.x86_64.rpm
+      - cloud-init-18.5-5.el8_1.eterrell202003061044.noarch.rpm
+  - name: Create Repo
+    become: yes
+    shell: |
+      cd /opt/local_repo
+      createrepo_c
+  - name: Create simplehttpserver
+    become: yes
+    copy:
+      content: |
+        import socket
+        import http.server
+
+        Handler = http.server.SimpleHTTPRequestHandler
+
+        class HTTPServerV6(http.server.HTTPServer):
+            address_family = socket.AF_INET6
+
+        def main():
+            server = HTTPServerV6(('::1', 8000), Handler)
+            server.serve_forever()
+
+       if __name__ == '__main__':
+           main()
+      dest: /usr/local/bin/simplehttpserver.py
+  - name: Create systemd unit for simplehttpserver
+    copy:
+      content: |
+        [Unit]
+        Description=Python SimpleHTTP Server
+        After=syslog.target network.target
+        
+        [Service]
+        Type=simple
+        Restart=always
+        RestartSec=10
+        User=root
+        WorkingDirectory=/opt/local_repo
+        ExecStart=/usr/local/bin/simplehttpserver.py
+        
+        [Install]
+        WantedBy=multi-user.target
+      dest: /etc/systemd/system/simplehttpserver.service
+  - name: systemctl daemon-reload
+    systemd:
+      daemon_reload: yes
+  - name: Start simplehttpserver service
+    systemd:
+      name: simplehttpserver
+      enabled: yes
+      state: started
   - name: Install Undercloud
     shell: |
       openstack tripleo container image prepare default --local-push-destination --output-env-file {{ ansible_env.HOME }}/containers-prepare-parameter.yaml
