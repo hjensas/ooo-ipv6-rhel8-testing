@@ -69,7 +69,7 @@
         - python3-tripleoclient
   - name: Git checkout ooo-bp-tripleo-routed-networks-templates-testing
     git:
-      repo: https://github.com/hjensas/ooo-ipv6-testing.git
+      repo: https://github.com/hjensas/ooo-ipv6-rhel8-testing.git
       dest: "{{ ansible_env.HOME }}/ooo-ipv6-testing"
   - name: Create symlinks
     file:
@@ -86,11 +86,14 @@
     file:
       dest: "{{ ansible_env.HOME }}/images"
       state: directory
-  - name: Build Images - async task
+  - name: Install overcloud images from rpm
+    become: yes
+    yum:
+      name: rhosp-director-images-x86_64
+  - name: Copy images
     shell: |
-      cd {{ ansible_env.HOME }}/images
-      export DIB_YUM_REPO_CONF="/etc/yum.repos.d/delorean*"
-      openstack overcloud image build
+      tar -xf /usr/share/rhosp-director-images/overcloud-full-16.0-20200226.1.el8ost.x86_64.tar -C {{ ansible_env.HOME }}/images
+      tar -xf /usr/share/rhosp-director-images/ironic-python-agent-16.0-20200226.1.el8ost.x86_64.tar -C {{ ansible_env.HOME }}/images
   - name: Run script to patch stuff
     become: yes
     shell: |
