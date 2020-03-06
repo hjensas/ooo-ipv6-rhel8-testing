@@ -118,7 +118,7 @@
     become: yes
     shell: |
       cd /opt/local_repo
-      createrepo_c
+      createrepo_c /opt/local_repo
   - name: Create simplehttpserver
     become: yes
     copy:
