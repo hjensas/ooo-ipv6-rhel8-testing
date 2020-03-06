@@ -158,14 +158,17 @@
         WantedBy=multi-user.target
       dest: /etc/systemd/system/simplehttpserver.service
   - name: systemctl daemon-reload
+    become: yes
     systemd:
       daemon_reload: yes
   - name: Start simplehttpserver service
+    become: yes
     systemd:
       name: simplehttpserver
       enabled: yes
       state: started
   - name: create yum repo
+    become: yes
     copy:
       content: |
         [local-repo]
