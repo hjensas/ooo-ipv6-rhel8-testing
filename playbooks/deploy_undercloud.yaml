@@ -133,8 +133,8 @@
             server = HTTPServerV6(('::1', 8000), Handler)
             server.serve_forever()
 
-       if __name__ == '__main__':
-           main()
+        if __name__ == '__main__':
+            main()
       dest: /usr/local/bin/simplehttpserver.py
   - name: Create systemd unit for simplehttpserver
     copy:
