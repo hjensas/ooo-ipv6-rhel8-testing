@@ -162,6 +162,15 @@
       name: simplehttpserver
       enabled: yes
       state: started
+  - name: create yum repo
+    copy:
+      content: |
+        [local-repo]
+        name=local-repo
+        gpgcheck=0
+        enabled=1
+        baseurl=http://[::1]:8000/
+      dest: /etc/yum.repos.d/local_repo.repo
   - name: Install Undercloud
     shell: |
       openstack tripleo container image prepare default --local-push-destination --output-env-file {{ ansible_env.HOME }}/containers-prepare-parameter.yaml
@@ -172,6 +181,7 @@
             tasks_from: yum_update.yml
             compare_host_packages: true
             yum_repos_dir_path: /etc/yum.repos.d
+            update_repo: local-repo
       EOF
       openstack undercloud install
   - name: Run script to patch image
