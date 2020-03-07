@@ -113,7 +113,7 @@
     with_fileglob:
       - /home/hjensas/local_repo/dnsmasq-2.79-11.el8.x86_64.rpm
       - /home/hjensas/local_repo/dnsmasq-utils-2.79-11.el8.x86_64.rpm
-      - /home/hjensas/local_repo/cloud-init-18.5-5.el8_1.eterrell202003061044.noarch.rpm
+      - /home/hjensas/local_repo/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm
   - name: Create Repo
     become: yes
     shell: |
@@ -198,6 +198,7 @@
       EOF
       openstack undercloud install
   - name: Run script to patch image
+    become: yes
     shell: |
       bash {{ ansible_env.HOME }}/ipv6-image-patches.sh
   - name: Upload overcloud images
