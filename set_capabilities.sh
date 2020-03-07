@@ -1,4 +1,4 @@
-source /home/centos/stackrc
+source ~/stackrc
 
 openstack baremetal node set \
   --property capabilities='profile:control,boot_option:local' baremetal-0
