@@ -97,7 +97,10 @@
   - name: Run script to patch stuff
     become: yes
     shell: |
-      bash {{ ansible_env.HOME }}/ipv6-patches.sh
+      LIBGUESTFS_BACKEND=direct virt-customize --add {{ ansible_env.HOME }}/images/overcloud-full.qcow2 \
+      --upload /opt/local_repo/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm:/root \
+      --run-command "dnf update /root/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm" \
+      --selinux-relabel
   - name: Create local repo directory
     become: yes
     file:
