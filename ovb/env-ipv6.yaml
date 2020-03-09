@@ -22,7 +22,7 @@ parameter_defaults:
   overcloud_tenant_net_ip_version: 6
   overcloud_tenant_net_cidr: fd12:3456:789a:51::/64
 
-  IPv6_dhcpv6-statefull: true
+  IPv6_dhcpv6-statefull: false
  
 resource_registry:
   OS::OVB::UndercloudNetworks: templates/undercloud-networks.yaml
