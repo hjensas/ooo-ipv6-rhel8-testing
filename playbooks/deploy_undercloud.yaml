@@ -182,7 +182,7 @@
     shell: |
       LIBGUESTFS_BACKEND=direct virt-customize --add {{ ansible_env.HOME }}/images/overcloud-full.qcow2 \
       --upload /opt/local_repo/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm:/root \
-      --run-command "dnf update /root/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm" \
+      --run-command "dnf update -y /root/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm" \
       --selinux-relabel
   - name: Install Undercloud
     shell: |
