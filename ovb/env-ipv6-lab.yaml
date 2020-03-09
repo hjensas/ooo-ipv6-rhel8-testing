@@ -16,7 +16,7 @@ parameter_defaults:
   bmc_prefix: bmc
   external_net: 38.145.32.0/22
   key_name: default
-  node_count: 1
+  node_count: 2
   private_net: private
   provision_net: ctlplane
   provision_net_shared: False
