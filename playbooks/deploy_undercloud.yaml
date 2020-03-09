@@ -94,13 +94,6 @@
     shell: |
       tar -xf /usr/share/rhosp-director-images/overcloud-full-16.0-20200226.1.el8ost.x86_64.tar -C {{ ansible_env.HOME }}/images
       tar -xf /usr/share/rhosp-director-images/ironic-python-agent-16.0-20200226.1.el8ost.x86_64.tar -C {{ ansible_env.HOME }}/images
-  - name: Run script to patch stuff
-    become: yes
-    shell: |
-      LIBGUESTFS_BACKEND=direct virt-customize --add {{ ansible_env.HOME }}/images/overcloud-full.qcow2 \
-      --upload /opt/local_repo/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm:/root \
-      --run-command "dnf update /root/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm" \
-      --selinux-relabel
   - name: Create local repo directory
     become: yes
     file:
@@ -184,6 +177,13 @@
         enabled=1
         baseurl=http://[::1]:8000/
       dest: /etc/yum.repos.d/local_repo.repo
+  - name: Run script to patch stuff
+    become: yes
+    shell: |
+      LIBGUESTFS_BACKEND=direct virt-customize --add {{ ansible_env.HOME }}/images/overcloud-full.qcow2 \
+      --upload /opt/local_repo/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm:/root \
+      --run-command "dnf update /root/cloud-init-18.5-11.el8.eterrell202003061040.noarch.rpm" \
+      --selinux-relabel
   - name: Install Undercloud
     shell: |
       openstack tripleo container image prepare default --local-push-destination --output-env-file {{ ansible_env.HOME }}/containers-prepare-parameter.yaml
