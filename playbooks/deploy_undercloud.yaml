@@ -200,10 +200,6 @@
             {{ rhn_username }}: '{{ rhn_password }}'
       EOF
       openstack undercloud install
-  - name: Run script to patch image
-    become: yes
-    shell: |
-      bash {{ ansible_env.HOME }}/ipv6-image-patches.sh
   - name: Upload overcloud images
     shell: |
       source {{ ansible_env.HOME }}/stackrc
