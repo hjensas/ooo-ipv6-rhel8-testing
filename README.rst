@@ -8,7 +8,7 @@ Set up OVB environment
 
   mkdir ~/ovb-ipv6-rhel8
   virtualenv ~/ovb-ipv6-rhel8
-  source ~/ovb-ipv6-lab/bin/activate
+  source ~/ovb-ipv6-rhel8/bin/activate
   git clone https://opendev.org/openstack/openstack-virtual-baremetal.git ~/ovb-ipv6-rhel8/openstack-virtual-baremetal
   cd ~/ovb-ipv6-rhel8/openstack-virtual-baremetal
   git fetch https://review.opendev.org/openstack/openstack-virtual-baremetal refs/changes/49/686549/3 && git checkout FETCH_HEAD
