@@ -1,6 +1,8 @@
 parameter_defaults:
 
-  NtpServer: ['undercloud.localdomain']
+  NtpServer:
+    - fd12:3456:789a:1::fffe
+
   swap_size_megabytes: 8192
 
   ControllerCount: 1
